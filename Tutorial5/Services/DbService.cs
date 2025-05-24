@@ -57,4 +57,37 @@ var patients = await _context.Patients
             }).ToListAsync();
         return patients;
     }
+
+    public async Task<PatientWithMedicationsDto?> GetPatient(int id)
+    {
+        var patients = await _context.Patients
+                    .Include(p => p.Prescriptions)
+                        .ThenInclude(pr => pr.PrescriptionMedicaments)
+                            .ThenInclude(pm => pm.Medicament)
+                    .Where(p => p.IdPatient == id)
+                    .Select(e => new PatientWithMedicationsDto
+                    {
+                        IdPatient = e.IdPatient,
+                        FirstName = e.FirstName,
+                        LastName = e.LastName,
+                        Prescriptions = e.Prescriptions.OrderBy(p => p.DueDate).Select(p => new PrescriptionWithMedicationsDto
+                        {
+                            IdPrescription = p.IdPrescription,
+                            Date = p.Date,
+                            DueDate = p.DueDate,
+                            Medicaments = p.PrescriptionMedicaments.Select(m => new MedicamentWithDetailsDto
+                            {
+                                IdMedicament = m.Medicament.IdMedicament,
+                                Name = m.Medicament.Name,
+                                Description = m.Medicament.Description,
+                                Type = m.Medicament.Type,
+                                Dose = m.Dose,
+                                Details = m.Details
+                            }).ToList(),
+                            Doctor = p.Doctor
+                        }).ToList()
+                    }).FirstOrDefaultAsync();
+        return patients;
+    }
+
 }

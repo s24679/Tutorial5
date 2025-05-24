@@ -6,5 +6,6 @@ public interface IDbService
 {
     Task<List<BookWithAuthorsDto>> GetBooks();
     Task<List<PatientWithMedicationsDto>> GetPatients();
+    Task<PatientWithMedicationsDto> GetPatient(int id);
 
 }

@@ -23,6 +23,16 @@ namespace Tutorial5.Controllers
             return Ok(patients);
         }
 
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetPatient(int id)
+        {
+            var patient = await _dbService.GetPatient(id);
+            if (patient == null)
+                return NotFound();
+
+            return Ok(patient);
+        }
+
 
     }
 }
