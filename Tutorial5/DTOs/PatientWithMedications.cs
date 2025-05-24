@@ -16,7 +16,7 @@ public class PrescriptionWithMedicationsDto
     public DateOnly Date { get; set; }
     public DateOnly DueDate { get; set; }
     public List<MedicamentWithDetailsDto> Medicaments { get; set; }
-    public Doctor Doctor { get; set; }
+    public DoctorDto Doctor { get; set; }
 }
 
 public class MedicamentWithDetailsDto
